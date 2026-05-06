@@ -1,5 +1,6 @@
 import { motion } from 'motion/react';
 import { Compass, BookOpen, Clock, BarChart, CheckCircle2 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export default function Pathways() {
   const pathways = [
@@ -93,9 +94,9 @@ export default function Pathways() {
                 </div>
 
                 <div className="mt-8 flex items-center justify-between">
-                  <button className="btn-primary px-8">
+                  <Link to="/dashboard" className="btn-primary px-8 text-center">
                     Start Pathway
-                  </button>
+                  </Link>
                   <div className="hidden sm:flex items-center gap-1 text-[10px] font-bold text-slate-400">
                     <CheckCircle2 size={14} className="text-emerald-500" />
                     724 Started

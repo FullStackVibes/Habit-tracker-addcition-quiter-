@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User, onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
-import { auth, db } from '../lib/firebase';
+import { auth, db, handleFirestoreError, OperationType } from '../lib/firebase';
 
 interface AuthContextType {
   user: User | null;
@@ -22,24 +22,37 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      setLoading(true);
       setUser(user);
+      
       if (user) {
-        const userDocRef = doc(db, 'users', user.uid);
-        const userDoc = await getDoc(userDocRef);
-        
-        if (!userDoc.exists()) {
-          const newProfile = {
-            uid: user.uid,
-            email: user.email,
-            displayName: user.displayName,
-            photoURL: user.photoURL,
-            createdAt: serverTimestamp(),
-            bio: '',
-          };
-          await setDoc(userDocRef, newProfile);
-          setProfile(newProfile);
-        } else {
-          setProfile(userDoc.data());
+        const userPath = `users/${user.uid}`;
+        try {
+          const userDocRef = doc(db, 'users', user.uid);
+          const userDoc = await getDoc(userDocRef);
+          
+          if (!userDoc.exists()) {
+            const newProfile = {
+              uid: user.uid,
+              email: user.email,
+              displayName: user.displayName,
+              photoURL: user.photoURL,
+              createdAt: serverTimestamp(),
+              bio: '',
+            };
+            await setDoc(userDocRef, newProfile);
+            setProfile(newProfile);
+          } else {
+            setProfile(userDoc.data());
+          }
+        } catch (error) {
+          // Log but don't block the app if profile creation fails (likely rules issue)
+          console.error("Profile sync error:", error);
+          try {
+            handleFirestoreError(error, OperationType.WRITE, userPath);
+          } catch (e) {
+            // Error already logged to console as JSON string
+          }
         }
       } else {
         setProfile(null);

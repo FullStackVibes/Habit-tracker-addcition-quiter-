@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from 'firebase/firestore';
-import { db } from '../../lib/firebase';
+import { db, handleFirestoreError, OperationType } from '../../lib/firebase';
 import { useAuth } from '../../contexts/AuthContext';
 import { Send, User as UserIcon } from 'lucide-react';
 import { format } from 'date-fns';
@@ -22,6 +22,7 @@ export default function ChatInterface({ circleId, circleName }: { circleId: stri
   useEffect(() => {
     if (!circleId) return;
 
+    const messagesPath = `circles/${circleId}/messages`;
     const q = query(
       collection(db, 'circles', circleId, 'messages'),
       orderBy('createdAt', 'asc')
@@ -33,6 +34,8 @@ export default function ChatInterface({ circleId, circleName }: { circleId: stri
         ...doc.data()
       })) as Message[];
       setMessages(msgs);
+    }, (error) => {
+      handleFirestoreError(error, OperationType.GET, messagesPath);
     });
 
     return unsubscribe;
@@ -48,6 +51,7 @@ export default function ChatInterface({ circleId, circleName }: { circleId: stri
     e.preventDefault();
     if (!inputValue.trim() || !user) return;
 
+    const messagesPath = `circles/${circleId}/messages`;
     try {
       await addDoc(collection(db, 'circles', circleId, 'messages'), {
         text: inputValue,
@@ -57,7 +61,7 @@ export default function ChatInterface({ circleId, circleName }: { circleId: stri
       });
       setInputValue('');
     } catch (err) {
-      console.error("Error sending message:", err);
+      handleFirestoreError(err, OperationType.CREATE, messagesPath);
     }
   };
 

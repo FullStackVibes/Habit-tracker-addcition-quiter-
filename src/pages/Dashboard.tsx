@@ -1,15 +1,17 @@
 import { motion } from 'motion/react';
 import { useAuth } from '../contexts/AuthContext';
 import { Calendar, Heart, Shield, Sparkles, TrendingUp } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export default function Dashboard() {
-  const { user, profile } = useAuth();
+  const { user } = useAuth();
 
   if (!user) {
     return (
       <div className="container mx-auto px-6 py-24 text-center">
-        <h1 className="text-3xl font-display font-bold mb-4">Your Journey Awaits</h1>
-        <p className="text-slate-500">Sign in to track your progress and manage your growth pathways.</p>
+        <h1 className="text-3xl font-display font-bold mb-4 text-slate-900 leading-tight">Your Journey Awaits</h1>
+        <p className="text-slate-500 mb-8 max-w-md mx-auto">Sign in to track your progress and manage your growth pathways.</p>
+        <Link to="/" className="btn-primary inline-block">Back to Home</Link>
       </div>
     );
   }
@@ -62,9 +64,9 @@ export default function Dashboard() {
 
         <div className="mt-auto p-5 bg-indigo-900 rounded-2xl text-white">
           <p className="text-xs font-medium opacity-80 mb-3 text-center">Want to help the community?</p>
-          <button className="w-full py-3 bg-indigo-500 hover:bg-indigo-400 rounded-xl text-xs font-bold shadow-lg shadow-indigo-900/40 transition-all">
+          <Link to="/community" className="w-full inline-block text-center py-3 bg-indigo-500 hover:bg-indigo-400 rounded-xl text-xs font-bold shadow-lg shadow-indigo-900/40 transition-all">
             Become a Listener
-          </button>
+          </Link>
         </div>
       </aside>
 
@@ -89,9 +91,9 @@ export default function Dashboard() {
             <div className="w-20 h-20 bg-indigo-50 rounded-3xl flex items-center justify-center text-4xl mb-6">
               💬
             </div>
-            <h2 className="text-2xl font-bold text-slate-800 mb-3 text-center">Instant Support</h2>
+            <h2 className="text-2xl font-bold text-slate-800 mb-3 text-center text-nowrap">Instant Support</h2>
             <p className="text-slate-500 text-sm mb-8 max-w-xs mx-auto">Connect with a trained listener for 24/7 high-quality peer support.</p>
-            <button className="w-full btn-primary text-lg py-4">Start Chat Session</button>
+            <Link to="/chat" className="w-full btn-primary text-lg py-4 text-center">Start Chat Session</Link>
           </section>
 
           <div className="flex flex-col gap-8">
@@ -111,7 +113,7 @@ export default function Dashboard() {
                         <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{circle.active} Active Now</p>
                       </div>
                     </div>
-                    <button className="text-xs font-bold text-indigo-600 hover:underline">Join</button>
+                    <Link to="/chat" className="text-xs font-bold text-indigo-600 hover:underline">Join</Link>
                   </div>
                 ))}
               </div>
@@ -121,7 +123,7 @@ export default function Dashboard() {
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-xl italic font-serif text-indigo-600">Ps</div>
                 <div>
-                  <h3 className="font-bold text-indigo-900 border-none!">Professional Therapy</h3>
+                  <h3 className="font-bold text-indigo-900">Professional Therapy</h3>
                   <p className="text-xs text-indigo-700/70 leading-tight">Licensed counselors available.</p>
                 </div>
               </div>

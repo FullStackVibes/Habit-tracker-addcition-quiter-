@@ -1,5 +1,6 @@
 import { motion } from 'motion/react';
 import { Users, Search, MessageSquare, Heart, ShieldCheck } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export default function Community() {
   return (
@@ -54,7 +55,7 @@ export default function Community() {
                 </div>
                 <div className="flex items-center justify-between border-t border-slate-50 pt-4 mt-2">
                   <span className="text-xs text-slate-400 font-bold">{circle.members} members</span>
-                  <button className="text-indigo-600 text-xs font-bold hover:underline">Join Circle</button>
+                  <Link to="/chat" className="text-indigo-600 text-xs font-bold hover:underline">Join Circle</Link>
                 </div>
               </motion.div>
             ))}
