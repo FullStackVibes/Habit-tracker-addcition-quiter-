@@ -1,0 +1,56 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile information",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "bio": { "type": "string" }
+      },
+      "required": ["uid", "email", "createdAt"]
+    },
+    "Circle": {
+      "title": "Support Circle",
+      "description": "A group dedicated to a specific topic",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "category": { "type": "string" },
+        "memberCount": { "type": "integer" }
+      },
+      "required": ["name", "category"]
+    },
+    "Message": {
+      "title": "Message",
+      "description": "A chat message",
+      "type": "object",
+      "properties": {
+        "senderId": { "type": "string" },
+        "text": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "circleId": { "type": "string" }
+      },
+      "required": ["senderId", "text", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles"
+    },
+    "/circles/{circleId}": {
+      "schema": "Circle",
+      "description": "Support groups"
+    },
+    "/circles/{circleId}/messages/{messageId}": {
+      "schema": "Message",
+      "description": "Messages within a circle"
+    }
+  }
+}
